@@ -1,0 +1,1266 @@
+---
+title: "Reproducible research reports<br>with <img style='margin-bottom:-15px; height: 90px;' src='figs/quartologo.png'>"
+author: "Eline Van Geert and Lisa Koßmann"
+institute: "KU Leuven | ECVP 2026, Bournemouth"
+date: "23 August 2026"
+date-format: long
+format: 
+  revealjs:
+    slide-number: true
+    width: 1600
+    height: 900
+    logo: "figs/quartologo.png"
+    footer: "[github.com/ElineVG/Quarto_workshop_ECVP2026](https://github.com/ElineVG/Quarto_workshop_ECVP2026)"
+    preview-links: true
+    embed-resources: true
+execute: 
+  echo: true
+engine: knitr
+---
+
+## Get started
+
+```{r setup, include=FALSE}
+library(fontawesome)
+library(tidyverse)
+library(quarto)
+library(rmarkdown)
+library(palmerpenguins)
+library(reticulate)
+library(knitr)
+```
+
+- Install <img style='margin-bottom:-15px; height: 50px;' src='figs/quartologo.png'>: [https://quarto.org/docs/get-started/](https://quarto.org/docs/get-started/)
+
+. . .
+
+- Download the [workshop materials](https://github.com/ElineVG/Quarto_workshop_ECVP2026)
+
+. . .
+
+- Open your favorite local editor (VS Code / Jupyter / RStudio) or join online via [RStudio Cloud](https://posit.cloud/spaces/646893/join?access_code=jsG1zsRPE-npgRaiPHC-_xlBIbJwmnEIn4ejLM1z)
+
+::: notes
+
+Quarto is bundled and comes pre-installed with RStudio v2022.07.1 and beyond!
+
+- [Posit Cloud website](https://posit.cloud/)
+- More installation info: [https://qmd4sci.njtierney.com/installation.html](https://qmd4sci.njtierney.com/installation.html)
+
+Print to PDF: https://quarto.org/docs/presentations/revealjs/presenting.html#print-to-pdf
+
+python or python3 instead of py for Mac/Linux
+
+:::
+
+
+## Get started
+
+- When using R, install the following packages: 
+
+``` r
+pkg_list <- c(
+  "fontawesome", "tidyverse", "quarto", "rmarkdown", "palmerpenguins", "reticulate", "knitr"
+  )
+install.packages(pkg_list)
+
+```
+. . .
+
+- When using Python, install the following packages using the terminal: 
+
+``` python
+py -m pip install jupyter numpy matplotlib palmerpenguins tabulate IPython
+py -m pip install jupyterlab                # only when working with Jupyter Lab
+py -m jupyter lab test.ipynb                # only when working with Jupyter Lab
+```
+- For Python use combined with R, install these packages using the R package reticulate:
+
+``` r
+reticulate::py_install(c("matplotlib", "palmerpenguins", "tabulate", "IPython"))
+```
+
+::: notes
+
+Quarto is bundled and comes pre-installed with RStudio v2022.07.1 and beyond!
+
+- [Posit Cloud website](https://posit.cloud/)
+- More installation info: [https://qmd4sci.njtierney.com/installation.html](https://qmd4sci.njtierney.com/installation.html)
+
+Print to PDF: https://quarto.org/docs/presentations/revealjs/presenting.html#print-to-pdf
+
+python or python3 instead of py for Mac/Linux
+
+:::
+
+
+
+## What is <img style='margin-bottom:-15px; height: 70px;' src='figs/quartologo.png'>? 
+
+. . .
+
+An open-source publishing system to combine text and code into formatted output documents
+
+![](figs/quarto.png){fig-align="center"}
+[Artwork from "Hello, Quarto" keynote by Julia Lowndes and Mine
+Çetinkaya-Rundel, presented at RStudio Conference 2022. Illustrated by
+Allison Horst.]{style="font-size:2rem;"}
+
+::: notes
+Quarto® (https://quarto.org/) is an open-source scientific and technical
+publishing system built to create (possibly interactive) documents
+including Python, R, Julia, and/or Observable code. These documents can
+be easily regenerated when underlying computations or data change.
+Furthermore, a single source document can easily generate multiple
+output formats, e.g., articles, reports, presentations, websites, blogs,
+and books in HTML, PDF, MS Word, ePub, and more. These documents may or
+may not include equations, citations, cross-references, figure panels,
+etc.
+
+OR: Quarto is a command line interface (CLI) that renders plain text formats (`.qmd`, `.rmd`, `.md`) OR mixed formats (`.ipynb`/Jupyter notebook) into static PDF/Word/HTML reports, books, websites, presentations and more
+
+To use Quarto, you can use your favorite editor, including VS Code,
+RStudio, Jupyter Lab, or any text editor. To prepare for active
+participation to this workshop, you can already install your favorite
+programming language and editor (https://quarto.org/docs/get-started/).
+
+A schematic representing the multi-language input (e.g. Python, R,
+Observable, Julia) and multi-format output (e.g. PDF, html, Word
+documents, and more) versatility of Quarto.
+:::
+
+
+## Why <img style='margin-bottom:-15px; height: 70px;' src='figs/quartologo.png'>? 
+
+. . .
+
+> **"Friends don't let friends copy-paste"** ([Aust & Barth, 2023](https://frederikaust.com/papaja-workshop/slides/1_introduction.html))
+
+. . .
+
+[Computational non-reproducibility is a widespread problem:]{style="color: orange; font-weight: bold;"}
+<br>[([Artner et al., 2021](https://doi.org/10.1037/met0000365); [Eubank, 2016](https://doi.org/10.1017/S1049096516000196); [Konkol, Kray & Pfeiffer, 2019)](https://doi.org/10.1080/13658816.2018.1508687)]{style="font-size:1.6rem;"}
+
+. . .
+
+  - Typos, copy-paste errors, incorrect rounding, and other reporting errors
+  
+. . .
+
+  - Forgetting to update report after changing data or analysis
+  
+. . .
+
+  - Forgetting to properly save and document data and scripts
+  
+. . .
+
+  - Not indicating software and packages used including their version numbers
+  
+  
+
+::: notes
+Computational reproducibility is a minimum necessary condition for a finding to be believable and informative. (p. 4, Cacioppo, Kaplan, Krosnick, Olds, & Dean, 2015; also see Peng, 2011)
+https://frederikaust.com/papaja-workshop/slides/1_introduction.html#10
+
+:::
+
+## Why <img style='margin-bottom:-15px; height: 70px;' src='figs/quartologo.png'>? 
+
+<br>
+
+[Quarto can help you make your research more reproducible (same data, same results):]{style="color: orange; font-weight: bold;"}
+
+. . .
+
+  - Avoid errors by combining text, code, and code outputs from the start!
+  
+. . .
+  
+  - Also provides an easy way to share and document your code
+    
+. . .
+
+[Quarto can also make you more efficient in the long run:]{style="color: orange; font-weight: bold;"}
+
+. . .
+
+  - When data / code are updated, you press one button to rerun your complete analysis and update your report (no more copy-pasting!)
+
+    
+
+## Why <img style='margin-bottom:-15px; height: 70px;' src='figs/quartologo.png'>? 
+
+<br>
+
+[Quarto (R/Python/Julia/Observable to ...) is more flexible than alternative solutions:]{style="color: orange; font-weight: bold;"}
+
+. . .
+
+  -   [RMarkdown](https://rmarkdown.rstudio.com/) - R to ...
+  
+. . .
+  
+  -   [Jupyter](https://jupyter.org/) - Python to ...
+
+. . .
+
+  -   [StatTag](https://sites.northwestern.edu/stattag/) - Stata/SAS/R/Python to Word
+  
+. . .
+
+  -   [tidystats](https://www.tidystats.io/) - R to Word/Google Docs
+
+
+## How does <img style='margin-bottom:-15px; height: 70px;' src='figs/quartologo.png'> work? 
+  
+. . .
+
+![](figs/quarto2.png){width="100%"}
+
+[Artwork from "Hello, Quarto" keynote by Julia Lowndes and Mine
+Çetinkaya-Rundel, presented at RStudio Conference 2022. Illustrated by
+Allison Horst.]{style="font-size:2rem;"}
+
+::: notes
+A schematic representing rendering of Quarto documents from .qmd, to
+knitr or jupyter, to plain text markdown, then converted by pandoc into
+any number of output types including html, PDF, or Word document.
+
+Quarto® is an open-source scientific and technical publishing system
+built on Pandoc (a universal document converter)
+
+Quarto is a command line interface (CLI) that renders plain text formats
+(.qmd, .rmd, .md) OR mixed formats (.ipynb/Jupyter notebook) into static
+PDF/Word/HTML reports, books, websites, presentations and more
+
+-   knitr or jupyter engine evaluates R/Python/Julia code and returns a .md
+    file along with the evaluated code
+
+-   Quarto applies Lua filters + CSS/LaTeX which is then evaluated
+    alongside the .md file by Pandoc and converted to a final output
+    format
+
+A Quarto document i.e. a .qmd is a plain text file, like a .rmd, that
+can be rendered to many different formats
+
+No more copy-paste, no more manually rebuilding analyses from disparate
+components, no more dread when the data is updated and you need to run
+an analysis.
+:::
+
+## Why is it called <img style='margin-bottom:-15px; height: 70px;' src='figs/quartologo.png'>?
+
+. . .
+
+The 'quarto' book format
+
+![](figs/quartoformat.jpg){fig-align="center" width="55%"}
+
+::: notes
+We wanted to use a name that had meaning in the history of publishing
+and landed on Quarto, which is the format of a book or pamphlet produced
+from full sheets printed with eight pages of text, four to a side, then
+folded twice to produce four leaves. The earliest known European printed
+book is a Quarto, the Sibyllenbuch, believed to have been printed by
+Johannes Gutenberg in 1452–53.
+
+A quarto (sometimes abbreviated to 4to) was so named because it was printed on full-size blanksheets of paper. Four pages of quarto text would be printed on each side of the blanksheet like so
+
+The blanksheet would then be folded twice to make eight book pages across four leaves, each of them a quarter of the size of the original blanksheet.
+
+Many of Shakespeare’s plays were printed in quarto format before being collected in the 1623 folio. They were relatively affordable, as opposed to the rather blingin' folio, which was priced at ONE pound, the equivalent of about $200 today.
+(https://genius.com/3008765)
+:::
+
+## Objectives of this workshop
+
+. . .
+
+-   Learn what Quarto is and what can you use it for
+
+. . .
+
+-   Learn how to combine text, code, and code outputs together to create a fully
+    reproducible report
+    
+. . .
+
+-   Learn where to find additional resources and more advanced documentation  
+    
+## Who are we? 
+
+::::: columns
+::: {.column style="text-align: center; font-size:35px;"}
+![](figs/eline_vangeert.jpg){style="margin-bottom:-40px;" fig-align="center" height="350"}
+
+**Eline Van Geert**
+
+::: {.column style="text-align: left;"}
+
+`r fa("graduation-cap")` Postdoc researcher
+
+`r fa("home")` Brain & Cognition
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; PPW, KU Leuven
+
+`r fa("bluesky")` [elinevg](https://bsky.app/profile/elinevg.bsky.social)
+
+`r fa("globe")` [elinevg.github.io/](https://elinevg.github.io/)
+:::
+
+:::
+
+::: {.column style="text-align: center; font-size:35px;"}
+![](figs/lisa_kossmann.png){style="margin-bottom:-40px;" fig-align="center" height="350"}
+
+**Lisa Koßmann**
+
+::: {.column style="text-align: left;"}
+
+`r fa("graduation-cap")` PhD student
+
+`r fa("home")` Brain & Cognition
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; PPW, KU Leuven
+
+`r fa("bluesky")` [lisa-kossmann](https://bsky.app/profile/lisa-kossmann.bsky.social)
+
+`r fa("globe")` [lisa-kossmann.github.io](https://lisa-kossmann.github.io/)
+
+:::
+:::
+:::::
+
+
+# Create your first <img style='margin-bottom:-15px; height: 90px;' src='figs/quartologo.png'> document
+
+## Create a .qmd file
+
+![](figs/todo.png){.absolute top=-10 right=50 width="250"}
+
+. . .
+
+In your editor, create a .qmd file:
+
+- RStudio: `File -> New file -> Quarto document`
+
+- VS Code: `File -> New file -> Quarto document`
+
+- Jupyter: `File -> New -> Notebook` (creates a .ipynb)
+
+- or use another editor (e.g., [Positron](https://positron.posit.co/))
+
+::: notes
+
+This is a plain text file with a .qmd extension
+
+:::
+
+## Anatomy of a Quarto document
+
+::: notes
+A Quarto document has three main components
+:::
+
+. . . 
+
+-   Metadata (YAML)
+
+. . . 
+
+-   Code (R / Python)
+
+. . . 
+
+-   Text (Markdown)
+
+## Use your preferred editor
+
+::: r-stack
+![](https://quarto.org/docs/tools/images/rstudio-preview.png){.fragment width="75%" fig-alt="A screenshot of a Quarto document rendered inside RStudio" fig-align="center"}
+
+![](https://quarto.org/docs/tools/images/jupyterlab-preview.png){.fragment width="75%" fig-alt="A screenshot of a Quarto document rendered inside JupyterLab" fig-align="center"}
+
+![](https://quarto.org/docs/computations/images/python-vscode.png){.fragment width="75%" fig-alt="A screenshot of a Quarto document rendered inside VSCode" fig-align="center"}
+:::
+
+## Add a [YAML](https://yaml.org/) header
+
+<br>
+
+``` yaml
+---
+key: value
+---
+```
+
+## Add a [YAML](https://yaml.org/) header
+
+![](figs/todo.png){.absolute top=-50 right=50 width="120"}
+
+::: {style="font-size: 60px;"}
+``` yaml
+---
+title: "Your Document"
+author: "Your name"
+date: today
+format: 
+  html:
+    code-fold: show
+    embed-resources: true
+execute: 
+  warning: false
+---
+```
+:::
+
+. . . 
+
+::: callout-tip
+## Tip for efficiency
+
+RStudio + VSCode provide rich tab-completion - start a word and tab to complete, or Ctrl + space to see all available options.
+:::
+
+
+::: notes
+A Quarto document always starts with a YAML header
+
+YAML = Yet Another Markup Language / YAML Ain't Markup Language
+
+enclosed between ---
+
+It includes metadata like title, author, date, or format (HTML/PDF/Word),
+and also specific options for the format (e.g., embed-resources, toc, or code-fold for HTML)
+
+**Sub-options should be below the main format output and spacing matters!**
+
+Why YAML? To avoid manually typing out all the options, every time!
+
+If no engine specified, Quarto will use whatever language is found first (R = knitr, Python/Julia = Jupyter)
+
+You can force using knitr if you’re mixing R/Python content via reticulate or if your first code chunk is not R but you want to use R.
+
+Treat YAML as a “raw cell” in Jupyter - Jupyter doesn’t care about YAML, but it’s needed/used by Quarto
+:::
+
+## Render your document to HTML/PDF/DOCX
+
+![](figs/todo.png){.absolute top=-50 right=50 height="120"}
+
+1. Render button in RStudio / Preview button in VS Code
+
+![](https://quarto.org/docs/tools/images/rstudio-render.png){fig-alt="A screenshot of the render button in RStudio" width="35%" float="left"}  
+
+
+. . . 
+
+
+![](https://quarto.org/docs/tools/images/vscode-preview-button.png){fig-alt="A screenshot of the render button in RStudio" width="35%" float="right"}
+
+
+::: notes
+Executing the Quarto Render button in RStudio will call Quarto render in a background job - this will prevent Quarto rendering from cluttering up the R console, and gives you and easy way to stop.
+:::
+
+
+## Render your document to HTML/PDF/DOCX
+
+![](figs/todo.png){.absolute top=-50 right=50 height="120"}
+
+2.  System shell via `quarto render`
+
+::: {style="font-size: 60px;"}
+```{.bash filename="terminal"}
+quarto render document.qmd # defaults to html
+quarto render document.qmd --to pdf
+quarto render document.qmd --to docx
+```
+:::
+
+. . .
+
+3.  R console via `quarto` R package
+
+::: {style="font-size: 60px;"}
+```{r}
+#| eval: false
+#| echo: true
+library(quarto)
+quarto_render("document.qmd") # defaults to html
+quarto_render("document.qmd", output_format = "pdf")
+```
+:::
+
+. . . 
+
+::: callout-warning
+In order to create PDFs you will need to install a recent distribution of TeX. 
+We recommend the use of TinyTeX (which is based on TexLive), 
+which you can install with the following command (in the Terminal):
+
+`quarto install tinytex`
+:::
+
+## Add plain text with Markdown formatting
+
+![](figs/todo.png){.absolute top=-50 right=50 height="120"}
+
+
+. . . 
+
+
+::: {style="font-size: 70px;"}
+
+``` markdown
+### Add a heading in your document
+
+This is a sentence with some **bold text**, *italic text*, 
+`code`, and a [link](https://quarto.org/).
+```
+:::
+
+<br>
+
+### Add a heading in your document
+
+This is a sentence with some **bold text**, *italic text*, `code`, and a [link](https://quarto.org/).
+
+
+<br>
+
+More info: [https://quarto.org/docs/authoring/markdown-basics.html](https://quarto.org/docs/authoring/markdown-basics.html)
+
+
+
+::: callout-tip 
+## Tip for Markdown newbies
+
+New to Markdown? Use the visual editor in RStudio or VS Code!
+:::
+
+
+
+## Add plain text with Markdown formatting
+
+<br>
+
++-----------------------------------+-------------------------------+
+| Markdown Syntax                   | Output                        |
++===================================+===============================+
+|     *italics* and **bold**        | *italics* and **bold**        |
++-----------------------------------+-------------------------------+
+|     superscript^2^ / subscript~2~ | superscript^2^ / subscript~2~ |
++-----------------------------------+-------------------------------+
+|     ~~strikethrough~~             | ~~strikethrough~~             |
++-----------------------------------+-------------------------------+
+|     `verbatim code`               | `verbatim code`               |
++-----------------------------------+-------------------------------+
+
+
+## Add plain text with Markdown formatting
+
++---------------------+-----------------+
+| Markdown Syntax     | Output          |
++=====================+=================+
+|     # Header 1      | # Header 1      |
++---------------------+-----------------+
+|     ## Header 2     | ## Header 2     |
++---------------------+-----------------+
+|     ### Header 3    | ### Header 3    |
++---------------------+-----------------+
+|     #### Header 4   | #### Header 4   |
++---------------------+-----------------+
+|     ##### Header 5  | ##### Header 5  |
++---------------------+-----------------+
+|     ###### Header 6 | ###### Header 6 |
++---------------------+-----------------+
+
+## Add images
+
+![](figs/todo.png){.absolute top=-50 right=50 height="120"}
+
+<br>
+
+``` markdown
+![Image caption](figs/quartologo.png){width='20%' fig-align='left'}
+```
+
+. . . 
+
+
+<br>
+
+![Image caption](figs/quartologo.png){width='20%' fig-align='left'}
+
+## Add equations
+
+![](figs/todo.png){.absolute top=-50 right=50 height="120"}
+
+<br>
+
+``` markdown
+Formula for population mean: 
+
+$$
+\mu = \frac{\sum x}{N} 
+$$ 
+```
+
+. . . 
+
+
+<br>
+
+Formula for population mean: 
+
+$$
+\mu = \frac{\sum x}{N} 
+$$ 
+
+## Add R code chunks (and code outputs)
+
+![](figs/todo.png){.absolute top=-50 right=50 height="120"}
+
+. . . 
+
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+````md
+```{{r}}
+#| label: fig-scatterplot
+#| fig-cap: "Scatterplot of flipper and bill lengths"
+
+library(palmerpenguins) # for data
+library(tidyverse)      # for data wrangling and visualization
+library(knitr)          # for tables
+
+ggplot(data = penguins, 
+       aes(x = flipper_length_mm, 
+           y = bill_length_mm)) +
+  geom_point(aes(color = species, 
+                 shape = species)) 
+```
+````
+
+:::
+
+::: {.column width="50%"}
+
+- Has 3x backticks on each end ```` ``` ````  
+- Place engine (`r`) between curly braces `{r}`  
+- Place options underneath, behind the `#|` (hashpipe): `#| option1: value`  
+
+:::
+
+::::
+
+. . . 
+
+
+::: callout-tip
+## Tip for efficiency
+
+Use a keyboard shortcut to create a new code chunk!
+
+RStudio: Ctrl + Alt + I (OS X: Cmd + Option + I)<br>
+VS Code: Ctrl + Shift + I 
+:::
+
+. . . 
+
+
+Options for R code chunks: [https://quarto.org/docs/reference/cells/cells-knitr.html](https://quarto.org/docs/reference/cells/cells-knitr.html) 
+
+
+
+## Add R code chunks (and code outputs)
+
+![](figs/todo.png){.absolute top=-50 right=50 height="120"}
+
+```{r}
+#| echo: fenced
+#| output-location: column
+#| label: fig-scatterplot
+#| fig-cap: "Scatterplot of flipper and bill lengths"
+#| warning: false
+
+library(palmerpenguins) # for data
+library(ggplot2)        # for data visualization
+
+ggplot(data = penguins, 
+       aes(x = flipper_length_mm, 
+           y = bill_length_mm)) +
+  geom_point(aes(color = species, 
+                 shape = species))
+```
+
+
+Options for R code chunks: [https://quarto.org/docs/reference/cells/cells-knitr.html](https://quarto.org/docs/reference/cells/cells-knitr.html) 
+
+
+## Add Python code chunks (and code outputs)
+
+![](figs/todo.png){.absolute top=-50 right=50 height="120"}
+
+```{python}
+#| echo: fenced
+#| output-location: column
+#| label: fig-scatterplot-py
+#| fig-cap: "Scatterplot of flipper and bill lengths in Python"
+
+import numpy as np
+import matplotlib.pyplot as plt
+from palmerpenguins import load_penguins
+
+penguins = load_penguins()
+
+penguins['species_color'] = penguins['species']
+penguins['species_color'].replace(['Adelie', 'Chinstrap', 'Gentoo'],
+                        ['red', 'green', 'blue'], inplace=True)
+
+penguins.plot.scatter(x='flipper_length_mm', 
+                      y='bill_length_mm',
+                      c='species_color')
+```
+
+. . . 
+
+Options for Python code chunks: [https://quarto.org/docs/reference/cells/cells-jupyter.html](https://quarto.org/docs/reference/cells/cells-jupyter.html)
+
+## Add Markdown table
+
+
+``` markdown
+| fruit  | price |
+|--------|-------|
+| apple  | 2.05  |
+| pear   | 1.37  |
+| orange | 3.09  |
+
+: Fruit prices {.striped .hover}
+``` 
+
+| fruit  | price  |
+|--------|--------|
+| apple  | 2.05   |
+| pear   | 1.37   |
+| orange | 3.09   |
+
+: Fruit prices {.striped .hover}
+
+. . . 
+
+More information: [https://quarto.org/docs/authoring/tables.html](https://quarto.org/docs/authoring/tables.html)
+
+## Add R table
+
+```{r}
+#| echo: fenced
+#| output-location: column
+#| label: tbl-stats
+#| tbl-cap: "Summary statistics for flipper and bill lengths"
+
+penguins %>%
+  group_by(species) %>%
+  summarise(
+    `Mean bill length` = mean(bill_length_mm, na.rm = T),
+    `Mean flipper length` = mean(flipper_length_mm, na.rm = T),
+    `Correlation, r` = cor(flipper_length_mm, bill_length_mm, use = "complete")
+    ) %>%
+  kable(digits = c(2, 2, 2, 2, 2))
+```
+
+. . . 
+
+More information: [https://quarto.org/docs/authoring/tables.html](https://quarto.org/docs/authoring/tables.html)
+
+
+## Add Python table
+
+```{python}
+#| echo: fenced
+#| output-location: column
+#| label: tbl-py
+#| tbl-cap: "First rows of penguins dataframe"
+
+from tabulate import tabulate
+from IPython.display import Markdown
+
+# Convert to markdown table
+Markdown(tabulate(penguins[["species", "island", "bill_length_mm", "flipper_length_mm"]].head(), headers='keys', tablefmt='github'))
+```
+
+. . . 
+
+More information: [https://quarto.org/docs/authoring/tables.html](https://quarto.org/docs/authoring/tables.html)
+
+## Add inline R or Python code
+
+![](figs/todo.png){.absolute top=-50 right=50 height="120"}
+
+``` markdown
+The palmerpenguins package contains data for ` {r} nrow(penguins) ` penguins.
+Remove the space before {r} to make sure the code is evaluated!
+```
+
+The palmerpenguins package contains data for `{r} nrow(penguins)` penguins.
+
+. . . 
+
+
+``` markdown
+The palmerpenguins package contains data for `{python} penguins.shape[0]` penguins.
+```
+
+. . . 
+
+
+::: callout-warning
+Inline code only works for the chosen engine (knitr: R; jupyter: Python).
+Specify the engine explicitly in the YAML header.
+:::
+
+## Add cross-references
+
+![](figs/todo.png){.absolute top=-50 right=50 height="120"}
+
+``` markdown
+![The Quarto logo](figs/quartologo.png){#fig-quarto width='20%' fig-align='left'}
+
+See @fig-quarto for the Quarto logo.
+```
+
+. . . 
+
+<br>
+
+![The Quarto logo](figs/quartologo.png){#fig-quarto width='20%' fig-align='left'}
+
+See @fig-quarto for the Quarto logo.
+
+
+. . . 
+
+
+- [Figures](https://quarto.org/docs/authoring/cross-references.html#figures) (#fig-)
+
+- [Tables](https://quarto.org/docs/authoring/cross-references.html#tables) (#tbl-)
+
+- [Sections](https://quarto.org/docs/authoring/cross-references.html#sections) (#sec-)
+
+- [Equations](https://quarto.org/docs/authoring/cross-references.html#equations) (#eq-)
+
+- [and more](https://quarto.org/docs/authoring/cross-references.html)
+
+## Add citations
+
+![](figs/todo.png){.absolute top=-50 right=50 height="120"}
+
+
+- Add citation in text: @... (manually or using visual editor > Insert citation)
+
+``` markdown
+The palmerpenguins package was developed by @horst2020. We will create a document using Quarto [@quarto] and R [@R] or Python [@Python].
+```
+
+
+. . . 
+
+
+
+- Specify .bib file in YAML
+
+
+``` yaml
+bibliography: references.bib
+```
+
+
+## Add tabsets
+
+![](figs/todo.png){.absolute top=-50 right=50 height="120"}
+
+```
+::: {.panel-tabset}
+
+## Element 1
+
+## Element 2
+
+:::
+```
+
+## Add tabsets
+
+::: {.panel-tabset}
+
+## R figure {#sec-r}
+
+```{r}
+#| fig-cap: "Scatterplot of flipper and bill lengths in R"
+#| echo: false
+
+library(palmerpenguins) # for data
+library(tidyverse)      # for data wrangling and visualization
+library(knitr)          # for tables
+
+ggplot(data = penguins, 
+       aes(x = flipper_length_mm, 
+           y = bill_length_mm)) +
+  geom_point(aes(color = species, 
+                 shape = species)) 
+```
+
+## Python figure {#sec-py}
+
+```{python}
+#| fig-cap: "Scatterplot of flipper and bill lengths in Python"
+#| echo: false
+
+import numpy as np
+import matplotlib.pyplot as plt
+from palmerpenguins import load_penguins
+
+penguins = load_penguins()
+
+penguins['species_color'] = penguins['species']
+penguins['species_color'].replace(['Adelie', 'Chinstrap', 'Gentoo'],
+                        ['red', 'green', 'blue'], inplace=True)
+
+penguins.plot.scatter(x='flipper_length_mm', 
+                      y='bill_length_mm',
+                      c='species_color')
+
+```
+
+:::
+
+
+## Add footnotes
+
+![](figs/todo.png){.absolute top=-50 right=50 height="120"}
+
+``` markdown
+This sentence ends with a footnote.[^1]
+
+[^1]: This is an example footnote.
+```
+
+. . . 
+
+
+This sentence ends with a footnote.[^1]
+
+[^1]: This is an example footnote.
+
+
+## Bonus features
+
+- [interactive outputs](https://quarto.org/docs/gallery/#interactive-docs) (only for HTML outputs):
+
+    - `htmlwidgets` for R
+    
+    - `Jupyter widgets` for Python/Julia
+    
+    - `Observable JS`
+    
+    - `Shiny` for [R](https://quarto.org/docs/interactive/shiny/) and [Python](https://quarto.org/docs/blog/posts/2022-10-25-shinylive-extension/)
+    
+- [callouts](https://quarto.org/docs/authoring/markdown-basics.html#callout-blocks)
+
+- [videos](https://quarto.org/docs/authoring/videos.html)
+
+- [diagrams](https://quarto.org/docs/authoring/markdown-basics.html#diagrams)
+
+
+## Bonus features
+
+- [code annotation](https://quarto.org/docs/authoring/code-annotation.html)
+
+- [article layout](https://quarto.org/docs/authoring/article-layout.html)
+
+- [Extensions](https://quarto.org/docs/extensions/):
+  - shortcodes and filters (e.g., fontawesome icons `r fa("graduation-cap")` )
+  - journal article formats
+  - custom formats
+  
+- and much more! <https://quarto.org/docs/guide/>
+
+
+## Observable JS
+
+<br>
+
+```{ojs}
+viewof temp = Inputs.range([0, 100], {step: 1, value: 34, label: htl.html`Temp &#x2103;`})
+```
+
+<br>
+Converting temperature from &#x2103; to &#x2109; <br>  
+Celsius = ${d3.format(".0f")(temp)}&#x2103; and Fahrenheit = ${d3.format(".1f")(temp * 9/5 + 32)}&#x2109;.
+
+. . .
+
+Generated using this code chunk, text, and inline code: 
+
+````code
+```{{ojs}}
+viewof temp = Inputs.range([0, 100], {step: 1, value: 34, label: htl.html`Temp &#x2103;`})
+```
+
+Converting temperature from &#x2103; to &#x2109; <br>  
+Celsius = ${d3.format(".0f")(temp)}&#x2103; and Fahrenheit = ${d3.format(".1f")(temp * 9/5 + 32)}&#x2109;.
+
+````
+
+
+## Other output formats
+. . .
+
+
+- [Presentations](https://quarto.org/docs/presentations/) (Revealjs / Beamer / PowerPoint)
+
+. . .
+
+
+- [Dashboards](https://quarto.org/docs/dashboards/)
+
+. . .
+
+
+
+- [Websites](https://quarto.org/docs/websites/)
+
+. . .
+
+
+
+- [Books](https://quarto.org/docs/books/)
+
+. . .
+
+
+
+- [Manuscripts](https://quarto.org/docs/manuscripts/)
+
+. . .
+
+
+- ...
+
+## Examples of advanced use cases
+
+. . .
+
+- Your poster using Quarto: [posterdown](https://github.com/brentthorne/posterdown), [typst-poster](https://github.com/pncnmnp/typst-poster), [quarto_poster](https://github.com/higgi13425/quarto_poster), or [docposter](https://github.com/bbucior/docposter)
+
+. . .
+
+
+- Your PhD thesis using Quarto: [PhD thesis Eline](https://elinevg.github.io/pragnanz/); [other Quarto books](https://quarto.org/docs/gallery/#books)
+
+::: notes
+Quarto book project rendering to HTML and PDF, HTML including interactive figures
+:::
+
+. . .
+
+- Your journal articles using Quarto <br> (e.g. using [apaquarto](https://wjschne.github.io/apaquarto/), [other formats](https://quarto.org/docs/journals/), or [Quarto Manuscripts](https://quarto.org/docs/manuscripts/) )
+
+. . .
+
+
+- Parametrized reports using Quarto: [blog on parametrized reports](https://www.mm218.dev/posts/2022-08-04-how-to-use-quarto-for-parameterized-reporting/); [Quarto documentation on parameters](https://quarto.org/docs/computations/parameters.html)
+
+. . .
+
+
+- Your website using Quarto: [personal website (example 1)](https://silviacanelon.com/); [personal website (Eline)](https://elinevg.github.io/); [documentation website](https://quarto.org/); [other website projects](https://quarto.org/docs/gallery/#websites)
+
+. . .
+
+- Your [dashboards](https://quarto.org/docs/gallery/#dashboards) or [interactive documents](https://quarto.org/docs/gallery/#interactive-docs) using Quarto
+
+. . .
+
+- Your [surveys](https://surveydown.org/) in Quarto
+
+
+## Awesome Quarto resources (only a selection!)
+
+. . .
+
+-   [Quarto cheatsheet](https://rstudio.github.io/cheatsheets/quarto.pdf)
+
+. . .
+
+-   [Awesome Quarto list](https://github.com/mcanouil/awesome-quarto)
+
+. . .
+
+-   [Quarto for Scientists](https://qmd4sci.njtierney.com/)
+
+. . .
+
+-   [Quarto FAQ](https://quarto.org/docs/faq/)
+
+. . .
+
+-   [Quarto questions](https://github.com/quarto-dev/quarto-cli/discussions)
+
+
+## Bonus: What to do with my existing `.Rmd` or `.ipynb`?
+
+For some of you - nothing changes! Keep using RMarkdown and Jupyter.
+
+<br>
+
+. . .
+
+However, most existing `.rmd` or `.ipynb` can be rendered as-is via Quarto
+
+::: {style="font-size: 80px;"}
+```{.bash filename="terminal"}
+quarto render my-favorite.rmd --to html
+```
+:::
+
+. . .
+
+<br>
+
+Since Jupyter notebooks can either be treated as a linear document to be re-executed or an already evaluated document there are additional options like: `--execute`
+
+::: {style="font-size: 80px;"}
+```{.bash filename="terminal"}
+quarto render my-favorite.ipynb --to html --execute
+```
+:::
+
+## Bonus: Why Quarto, instead of RMarkdown
+
+-   Batteries included, shared syntax
+-   Choose your own editor and your preferred data science language
+-   Better accessibility and richer features out of the box
+-   More enhancements overtime - RMarkdown still maintained, but majority of new features built into Quarto
+
+. . .
+
+Collaboration with other colleagues in other languages - shared format, choose your editor and your native language
+
+
+## Quarto, crafted with love and care
+
+> Development of Quarto is sponsored by RStudio, PBC. The same core team works on both Quarto and R Markdown:
+
+-   Carlos Scheidegger ([\@cscheid](https://github.com/cscheid))
+
+-   Charles Teague ([\@dragonstyle](https://github.com/dragonstyle))
+
+-   Christophe Dervieux ([\@cderv](https://github.com/cderv))
+
+-   J.J. Allaire ([\@jjallaire](https://github.com/jjallaire/))
+
+-   Yihui Xie ([\@yihui](https://github.com/yihui))
+
+Here is the [full contributors list](https://github.com/quarto-dev/quarto-cli/graphs/contributors). Quarto is open source and they welcome contributions in their github repository as well! <https://github.com/quarto-dev/quarto-cli>.
+
+## What's next for Quarto? 
+
+[Quarto 2.0](https://opensource.posit.co/blog/2026-04-06_whats-next-quarto-2/)
+
+. . .
+
+
+- A collaborative editor
+
+- A visual editor that works well alongside a source editor
+
+. . .
+
+
+Some alternative collaborative tools (we did not test these out yet): 
+
+. . .
+
+- [QuartoReview](https://github.com/Lakens/QuartoReview): a local desktop app for editing .qmd, .Rmd, and .md files
+
+. . .
+
+- [Quartorium](https://github.com/andjar/quartorium): A collaborative WYSIWYG editor for Quarto
+
+. . .
+
+- [VS Code Live Share](https://visualstudio.microsoft.com/services/live-share/): collaborate on the same codebase without the need to synchronize
+
+## Attributions
+
+The slides and materials for this workshop were heavily based on other existing guides and workshops:
+
+- [Quarto official documentation](https://quarto.org/)
+
+- [Getting Started with Quarto](https://jthomasmock.github.io/quarto-2hr-webinar/) by Tom Mock (CC BY 4.0)
+
+- [Quarto workshop](https://lbbe.pages.in2p3.fr/poleinfo/quarto_workshop/) by Julien Barnier and Aurélie Siberchicot
+
+Icon attributions: 
+
+- to do by Michael Appleford from Noun Project (CC BY 3.0)
+
+Thank you very much for providing these open resources!
+
+
+## Feedback, further questions or want to connect?
+
+
+::::: columns
+::: {.column style="text-align: center; font-size:30px;"}
+![](figs/eline_vangeert.jpg){style="margin-bottom:-40px;" fig-align="center" height="250"}
+
+**Eline Van Geert**
+
+::: {.column style="text-align: left;"}
+
+`r fa("graduation-cap")` Postdoc researcher
+
+`r fa("home")` Brain & Cognition
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; PPW, KU Leuven
+
+`r fa("bluesky")` [elinevg.bsky.social](https://bsky.app/profile/elinevg.bsky.social)
+
+`r fa("globe")` [elinevg.github.io](https://elinevg.github.io)
+
+`r fa("envelope")` [eline.vangeert@kuleuven.be](mailto:eline.vangeert@kuleuven.be)
+:::
+
+:::
+
+::: {.column style="text-align: center; font-size:30px;"}
+![](figs/lisa_kossmann.png){style="margin-bottom:-40px;" fig-align="center" height="250"}
+
+**Lisa Koßmann**
+
+::: {.column style="text-align: left;"}
+
+`r fa("graduation-cap")` PhD student
+
+`r fa("home")` Brain & Cognition
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; PPW, KU Leuven
+
+`r fa("bluesky")` [lisa-kossmann.bsky.social](https://bsky.app/profile/lisa-kossmann.bsky.social)
+
+`r fa("globe")` [lisa-kossmann.github.io](https://lisa-kossmann.github.io/)
+
+`r fa("envelope")` [lisa.kossmann@kuleuven.be](mailto:lisa.kossmann@kuleuven.be)
+
+:::
+:::
+:::::
+
