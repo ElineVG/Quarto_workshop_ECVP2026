@@ -42,7 +42,8 @@ If possible, please check these things before coming to the workshop:
     `install.packages(c("fontawesome", "tidyverse", "quarto", "rmarkdown", "palmerpenguins", "knitr"))`
 
 -   When you are planning to use **\textcolor{lb}{Python only}**, install the following packages:\
-    `py -m pip install jupyter numpy matplotlib palmerpenguins tabulate IPython py -m pip install jupyterlab # only when working with Jupyter Lab`
+    `py -m pip install jupyter numpy matplotlib palmerpenguins tabulate IPython`\
+    `py -m pip install jupyterlab # only when working with Jupyter Lab`
     
     
 We look forward to meeting you in the workshop!
