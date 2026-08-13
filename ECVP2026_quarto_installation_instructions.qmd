@@ -1,0 +1,50 @@
+---
+title: "ECVP2026 Quarto installation instructions"
+format: 
+  pdf:
+    include-in-header: 
+      - text: |
+          \usepackage{xcolor}
+          \definecolor{lb}{HTML}{75AADB}
+    mainfont: ArialMT
+    fontsize: 10pt
+    linkcolor: lb
+    urlcolor: lb
+---
+
+Dear Quarto workshop attendee,
+
+If possible, please check these things before coming to the workshop:
+
+1.  Please bring a computer with either R, Python, or both installed.
+
+2.  Please make sure you install [**Quarto**](https://quarto.org/docs/get-started/) (cf. **<https://quarto.org/docs/get-started/>**)
+
+3.  Please have one of the following editors installed: [**RStudio**](https://posit.co/download/rstudio-desktop/),\
+    [**Visual Studio Code**](https://code.visualstudio.com/) (including the [**Quarto VS Code Extension**](https://marketplace.visualstudio.com/items?itemName=quarto.quarto)), or [**Jupyter Lab**](https://jupyter.org/install).
+
+    If you do not have one of these editors installed yet, we recommend installing RStudio, or otherwise Visual Studio Code.
+
+4.  Which programming languages do you plan to use during the workshop? If possible, try to install the following packages depending on your plans. No worries if it does not work out, we can also help you at the start of the workshop.
+
+-   When you are planning to use **\textcolor{lb}{R and Python combined}**:
+
+    -   Install the following R packages:\
+        `install.packages(c("fontawesome", "tidyverse", "quarto", "rmarkdown", "palmerpenguins", "reticulate", "knitr"))`
+
+    -   Install the following Python packages using the R package reticulate:\
+        `reticulate::py_install(c("matplotlib", "palmerpenguins", "tabulate", "IPython"))`
+
+    -   Install the following Python packages:\
+        `py -m pip install jupyter numpy matplotlib palmerpenguins tabulate IPython`
+
+-   When you are planning to use **\textcolor{lb}{R only}**, install the following packages:\
+    `install.packages(c("fontawesome", "tidyverse", "quarto", "rmarkdown", "palmerpenguins", "knitr"))`
+
+-   When you are planning to use **\textcolor{lb}{Python only}**, install the following packages:\
+    `py -m pip install jupyter numpy matplotlib palmerpenguins tabulate IPython py -m pip install jupyterlab # only when working with Jupyter Lab`
+    
+    
+We look forward to meeting you in the workshop!
+
+Eline Van Geert and Lisa Koßmann
