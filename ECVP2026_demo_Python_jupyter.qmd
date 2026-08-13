@@ -6,8 +6,8 @@ format:
     html:
         code-fold: show
         embed-resources: true
-    # pdf: default
-    # docx: default
+    pdf: default
+    docx: default
 execute: 
   warning: false
 engine: jupyter
