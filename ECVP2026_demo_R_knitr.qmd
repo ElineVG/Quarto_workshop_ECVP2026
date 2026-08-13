@@ -1,0 +1,112 @@
+---
+title: "ECVP2026 Quarto demo with knitr engine (R only)"
+author: "Eline Van Geert and Lisa Koßmann"
+date: today
+format:
+    html:
+        code-fold: show
+        embed-resources: true
+    # pdf: default
+    # docx: default
+execute: 
+  warning: false
+engine: knitr
+bibliography: references.bib
+---
+
+### Add a heading in your document
+
+This is a sentence with some **bold text**, *italic text*, `code`, and a [link](https://quarto.org/).
+
+![The Quarto logo](figs/quartologo.png){#fig-quarto width="20%" fig-align="left"}
+
+See @fig-quarto for the Quarto logo.
+
+@eq-mean gives the formula for the population mean:
+
+$$
+\mu = \frac{\sum x}{N} 
+$$ {#eq-mean}
+
+@sec-code shows how to add R or Python code chunks.
+
+The palmerpenguins package was developed by @horst2020. We will create a document using Quarto [@quarto] and R [@R] or Python [@Python].
+
+This sentence ends with a footnote.[^1]
+
+[^1]: This is an example footnote.
+
+## Add R code chunks {#sec-code}
+
+```{r}
+#| label: fig-scatterplot-r
+#| fig-cap: "Scatterplot of flipper and bill lengths in R"
+
+library(palmerpenguins) # for data
+library(tidyverse)      # for data wrangling and visualization
+library(knitr)          # for tables
+
+ggplot(data = penguins, 
+       aes(x = flipper_length_mm, 
+           y = bill_length_mm)) +
+  geom_point(aes(color = species, 
+                 shape = species)) 
+```
+
+
+## Add inline code
+
+The palmerpenguins package contains data for `{r} nrow(penguins)` penguins.
+
+
+## Add tables
+
+@tbl-md and @tbl-r show different table options in Quarto.
+
+
+::: panel-tabset
+
+## Markdown
+
+``` markdown
+| fruit  | price |
+|--------|-------|
+| apple  | 2.05  |
+| pear   | 1.37  |
+| orange | 3.09  |
+
+: Fruit prices {#tbl-md .striped .hover}
+``` 
+
+| fruit  | price |
+|--------|-------|
+| apple  | 2.05  |
+| pear   | 1.37  |
+| orange | 3.09  |
+
+: Fruit prices {#tbl-md .striped .hover}
+
+## R
+
+```{r}
+#| label: tbl-r
+#| tbl-cap: "Summary statistics for flipper and bill lengths"
+
+penguins %>%
+  group_by(species) %>%
+  summarise(
+    `Mean bill length` = mean(bill_length_mm, na.rm = T),
+    `Min bill length` = min(bill_length_mm, na.rm = T),
+    `Max bill length` = max(bill_length_mm, na.rm = T),
+    `Mean flipper length` = mean(flipper_length_mm, na.rm = T),
+    `Min flipper length` = min(flipper_length_mm, na.rm = T),
+    `Max flipper length` = max(flipper_length_mm, na.rm = T),
+    `Correlation, r` = cor(flipper_length_mm, bill_length_mm, use = "complete")
+    ) %>%
+  kable(digits = c(2, 2, 2, 2, 2))
+```
+
+::: 
+
+
+## References {.unnumbered}
